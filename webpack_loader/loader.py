@@ -45,15 +45,19 @@ class WebpackLoader(object):
                 chunk['url'] = self.get_chunk_url(chunk)
                 yield chunk
 
+    def prefix_url(self, url):
+        prefix = self.config.get('PUBLIC_PATH_PREFIX', '')
+        return prefix + url
+
     def get_chunk_url(self, chunk):
         public_path = chunk.get('publicPath')
         if public_path:
-            return public_path
+            return self.prefix_url(public_path)
 
         relpath = '{0}{1}'.format(
             self.config['BUNDLE_DIR_NAME'], chunk['name']
         )
-        return staticfiles_storage.url(relpath)
+        return self.prefix_url(staticfiles_storage.url(relpath))
 
     def get_bundle(self, bundle_name):
         assets = self.get_assets()

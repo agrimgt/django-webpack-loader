@@ -14,6 +14,7 @@ DEFAULT_CONFIG = {
         # FIXME: Explore usage of fsnotify
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
+        'PUBLIC_PATH_PREFIX': '',
         'IGNORE': ['.+\.hot-update.js', '.+\.map'],
         'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
     }
