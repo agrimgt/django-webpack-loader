@@ -2,6 +2,7 @@ from django import template, VERSION
 from django.conf import settings
 from django.utils.safestring import mark_safe
 
+from webpack_loader.exceptions import WebpackLoaderBadStatsError
 from .. import utils
 
 register = template.Library()
@@ -9,7 +10,10 @@ register = template.Library()
 
 @register.simple_tag
 def render_bundle(bundle_name, extension=None, config='DEFAULT', attrs=''):
-    tags = utils.get_as_tags(bundle_name, extension=extension, config=config, attrs=attrs)
+    try:
+        tags = utils.get_as_tags(bundle_name, extension=extension, config=config, attrs=attrs)
+    except WebpackLoaderBadStatsError:
+        tags = ['<p class="text-danger">Could not load webpack stats for bundle "{0}" :(</p>'.format(bundle_name)]
     return mark_safe('\n'.join(tags))
 
 
